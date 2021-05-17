@@ -1,24 +1,27 @@
 import configparser
 from datetime import datetime
+import os
 
 import pandas as pd
 import pytz
 import requests
 import time_uuid
 
+
 # Module information.
 __author__ = 'Anthony Farina'
 __copyright__ = 'Copyright 2021, NetCloud Monthly Failover Reporter'
 __credits__ = ['Anthony Farina']
 __license__ = 'MIT'
-__version__ = '1.1.0'
+__version__ = '1.2.1'
 __maintainer__ = 'Anthony Farina'
 __email__ = 'farinaanthony96@gmail.com'
 __status__ = 'Released'
 
+
 # Global variables from the config file for easy referencing.
 CONFIG = configparser.ConfigParser()
-CONFIG.read('../config.ini')
+CONFIG.read(os.path.dirname(os.path.realpath(__file__)) + '/../config.ini')
 NETCLOUD_HEADERS = CONFIG._sections['NetCloud API Info']
 TIMEZONE = CONFIG['Timezone Info']['timezone']
 EXCEL_FILE_NAME = CONFIG['Output Info']['excel-file-name']
