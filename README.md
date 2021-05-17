@@ -54,7 +54,22 @@ encounter any problems, please log an
 5. Submit a pull request ツ
 
 ## History
--  version 1.0.0 (initial release) - 2021/03/17
+- version 1.1.1 - 2021/05/17
+   - Adjusted README.md
+   - Adjusted version number
+   - Made relative path for config.ini
+
+
+-  version 1.1.0 - 2021/03/24
+   - Fixed bug where no more than 500 failovers can be processed
+   - Removed "Alert Type" column 
+   - Added "Info" column
+   - Reformatted global variables
+   - Edited comments
+  
+
+-  version 1.0.0 - 2021/03/17
+   - Initial release
 
 ## Credits
 Anthony Farina <<farinaanthony96@gmail.com>>
