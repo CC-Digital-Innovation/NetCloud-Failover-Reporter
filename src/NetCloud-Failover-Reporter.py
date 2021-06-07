@@ -13,7 +13,7 @@ __author__ = 'Anthony Farina'
 __copyright__ = 'Copyright 2021, NetCloud Monthly Failover Reporter'
 __credits__ = ['Anthony Farina']
 __license__ = 'MIT'
-__version__ = '1.1.1'
+__version__ = '1.1.2'
 __maintainer__ = 'Anthony Farina'
 __email__ = 'farinaanthony96@gmail.com'
 __status__ = 'Released'
@@ -21,7 +21,8 @@ __status__ = 'Released'
 
 # Global variables from the config file for easy referencing.
 CONFIG = configparser.ConfigParser()
-CONFIG.read(os.path.dirname(os.path.realpath(__file__)) + '/../config.ini')
+CONFIG_PATH = '/../configs/NetCloud-Failover-Reporter-config.ini'
+CONFIG.read(os.path.dirname(os.path.realpath(__file__)) + CONFIG_PATH)
 NETCLOUD_HEADERS = CONFIG._sections['NetCloud API Info']
 TIMEZONE = CONFIG['Timezone Info']['timezone']
 EXCEL_FILE_NAME = CONFIG['Output Info']['excel-file-name']
@@ -143,7 +144,7 @@ def netcloud_failover_reporter() -> None:
 
     # Convert the output list to an Excel file.
     output_dataframe = pd.DataFrame(output_list, columns=COL_LABELS)
-    output_dataframe.to_excel(EXCEL_FILE_NAME, index=None,
+    output_dataframe.to_excel('./../' + EXCEL_FILE_NAME + '.xlsx', index=None,
                               header=True)
 
 

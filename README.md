@@ -54,6 +54,13 @@ encounter any problems, please log an
 5. Submit a pull request ツ
 
 ## History
+- version 1.1.2 - 2021/06/07
+    - Added support for multiple config files
+    - No longer required to have the relative path or file extension in the
+      "excel-file-name" field for the config file
+    - Updated README.md
+
+
 - version 1.1.1 - 2021/05/17
    - Adjusted README.md
    - Adjusted version number
