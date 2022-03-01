@@ -2,48 +2,46 @@
 
 ## Summary
 Reports all failover events that have occurred on a given instance of 
-NetCloud since the start of the month and outputs the records to an Excel 
-sheet.
+NetCloud since the start of the month and outputs the records to an 
+Excel sheet.
 
 _Note: If you have any questions or comments you can always use GitHub 
 discussions, or email me at farinaanthony96@gmail.com._
 
 #### Why
-Provides insight to failover events that occur for systems using NetCloud 
-to monitor their network system(s).
+Provides insight to failover events that occur for systems using 
+NetCloud to monitor their network system(s).
 
 ## Requirements
-- Python >= 3.9.2
-- configparser >= 5.0.2
-- openpyxl >= 3.0.6
-- pandas >= 1.2.2
-- pytz >= 2021.1
-- requests >= 2.25.1
+- Python >= 3.9
+- configparser >= 5.2.0
+- openpyxl >= 3.0.9
+- pandas >= 1.4.1
+- pytz >= 2021.3
+- requests >= 2.27.1
 - time-uuid >= 0.2.0
 
 ## Usage
-- Clearly define what a "relevant failover" is and use the commented 
-  variables and "if" statement to filter out irrelevant failover records.
+- Define which failovers you'd like to track. If you want to track all 
+  failovers, make sure to disable the timeframe feature in the config 
+  file. If you'd like to specify the days of the week and timeframes 
+  per specified day of the week, enable the timeframe feature.
   
-- Edit the config.ini file with relevant NetCloud API information, the 
-  timezone the devices on NetCloud are in, the desired column names in the 
-  output Excel file, and the name of the output Excel file.
-  - _Make sure you request relevant information to place in your Excel 
-    columns. Available router information you can extract is here under 
-    "routers" -> "routers Endpoint Fields and Filters":
-    https://developer.cradlepoint.com/#!/Routers_
+- Edit the config file with relevant NetCloud API information, the
+  timeframe feature information, the timezone the devices on NetCloud 
+  are in, and the name of the output Excel file.
     
 - Simply run the script using Python:
 `python NetCloud-Failover-Reporter.py`
     
 ## Compatibility
-Should be able to run on any machine with a Python interpreter. This script 
-was only tested on a Windows machine running Python 3.9.2.
+Should be able to run on any machine with a Python interpreter. This 
+script was only tested on a Windows machine running Python 3.9.
 
 ## Disclaimer
-The code provided in this project is an open source example and should not 
-be treated as an officially supported product. Use at your own risk. If you 
-encounter any problems, please log an
+The code provided in this project is an open source example and should 
+not be treated as an officially supported product. Use at your own 
+risk. If you encounter any problems, please log an
 [issue](https://github.com/CC-Digital-Innovation/NetCloud-Failover-Reporter/issues).
 
 ## Contributing
@@ -54,12 +52,18 @@ encounter any problems, please log an
 5. Submit a pull request ツ
 
 ## History
+- version 2.0.0 - 2022/03/01
+    - Major refactor to code and config
+    - Added timeframe feature
+    - Updated README.md and LICENSE
+
+
 - version 1.1.2 - 2021/06/07
     - Added support for multiple config files
     - No longer required to have the relative path or file extension in the
       "excel-file-name" field for the config file
     - Updated README.md
-
+    
 
 - version 1.1.1 - 2021/05/17
    - Adjusted README.md
@@ -80,26 +84,3 @@ encounter any problems, please log an
 
 ## Credits
 Anthony Farina <<farinaanthony96@gmail.com>>
-
-## License
-MIT License
-
-Copyright (c) [2021] [Anthony G. Farina]
-
-Permission is hereby granted, free of charge, to any person obtaining a 
-copy of this software and associated documentation files (the "Software"), 
-to deal in the Software without restriction, including without limitation 
-the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-and/or sell copies of the Software, and to permit persons to whom the 
-Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in 
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
-DEALINGS IN THE SOFTWARE.
