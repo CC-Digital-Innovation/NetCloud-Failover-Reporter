@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: netcloud-failover-reporter
+  namespace: default
+spec:
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          annotations:
+            vault.hashicorp.com/agent-inject: 'true'
+            vault.hashicorp.com/role: 'netcloud_failover_reporter'
+            vault.hashicorp.com/agent-inject-secret-emailapi: 'secret/emailapi'
+            vault.hashicorp.com/agent-inject-template-emailapi: |
+              {{- with secret "secret/emailapi" -}}
+                export EMAIL_API_TOKEN="{{ .Data.data.Email_API_KEY }}"
+                export EMAIL_API_BASE_URL="{{ .Data.data.api_base_url }}"
+              {{- end }}
+            vault.hashicorp.com/agent-inject-secret-reporting: 'secret/reporting'
+            vault.hashicorp.com/agent-inject-template-reporting: |
+              {{- with secret "secret/reporting" -}}
+                export DIGITAL_INNOVATION_REPORTING_INBOX="{{ .Data.data.email_address }}"
+              {{- end }}
+            vault.hashicorp.com/agent-inject-secret-nc_fail: 'secret/nc_fail'
+            vault.hashicorp.com/agent-inject-default-template: json
+            vault.hashicorp.com/agent-pre-populate-only: 'true'
+            vault.hashicorp.com/ca-cert: /run/secrets/kubernetes.io/serviceaccount/ca.crt
+        spec:
+          containers:
+            - image: harbor.k3s.quokka.ninja/library/netcloud-failover-reporter:0.0.0
+              name: netcloud-failover-reporter
+              args: ['/bin/bash', '-c', 'source /vault/secrets/emailapi && source /vault/secrets/reporting && python ./src/netcloud_failover_reporter.py']
+          restartPolicy: Never
+          serviceAccountName: netcloud-failover-reporter
+      backoffLimit: 3
+  schedule: 14 9 16 12 *
+  timeZone: US/Eastern

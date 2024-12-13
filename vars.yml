@@ -1,0 +1,7 @@
+repo: https://github.com/CC-Digital-Innovation/NetCloud-Failover-Reporter
+ssh_url: git@github.com:CC-Digital-Innovation/NetCloud-Failover-Reporter.git
+branch: main
+project_root: src
+image: netcloud-failover-reporter
+manifest_path: netcloud_failover_reporter-cronjob.yml
+pipeline: netcloud-failover-reporter
