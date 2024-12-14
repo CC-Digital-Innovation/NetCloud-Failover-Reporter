@@ -404,9 +404,9 @@ def netcloud_failover_reporter(customer_config: dict) -> None:
     # Send the Excel sheet to the customer and our reporting email inbox.
     logger.info('Emailing the Excel sheet of failover events...')
     
-    # Make the list of email recipients.
+    # Make the list of email recipients. Always include the reporting inbox.
     email_to = list()
-    email_to.extend([DIGITAL_INNOVATION_REPORTING_INBOX])
+    email_to.append(DIGITAL_INNOVATION_REPORTING_INBOX)
     email_to.extend(customer_config['email_to'])
     
     # Send the failover report via email.
