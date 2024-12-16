@@ -34,5 +34,5 @@ spec:
           restartPolicy: Never
           serviceAccountName: netcloud-failover-reporter
       backoffLimit: 3
-  schedule: 0 18 14 12 *
-  timeZone: US/Eastern
+  schedule: 0 5 1 * *
+  timeZone: US/Pacific

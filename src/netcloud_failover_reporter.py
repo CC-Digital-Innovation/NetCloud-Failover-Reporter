@@ -30,7 +30,7 @@ NETCLOUD_API_MAX_LIMIT = 100
 
 # Initialize other constant global variables.
 DIGITAL_INNOVATION_REPORTING_INBOX = os.getenv('DIGITAL_INNOVATION_REPORTING_INBOX')
-EXCEL_BASE_FILE_NAME = 'netcloud_failover_report'
+CSV_BASE_FILE_NAME = 'netcloud_failover_report'
 REPORT_TIME_FORMAT = '%m/%d/%Y %I:%M:%S %p %Z'
 REPORT_COLUMN_LABELS = [
     'Router Name',
@@ -312,7 +312,7 @@ def get_last_months_failover_alerts(customer_config: dict) -> list[dict]:
 
 def format_failover_alerts(failover_alerts: list[NetCloudFailoverAlert], customer_config: dict) -> list[list[str]]:
     """
-    Formats the provided raw failover alerts to look pretty for the Excel sheet
+    Formats the provided raw failover alerts to look pretty for the CSV file
     report. Uses the customer's timezone to format the "Failover Timestamp" 
     column.
 
@@ -322,7 +322,7 @@ def format_failover_alerts(failover_alerts: list[NetCloudFailoverAlert], custome
         customer_config (dict): The customer config.
 
     Returns:
-        list[list[str]]: A list of failover rows for the Excel sheet report.
+        list[list[str]]: A list of failover rows for the CSV file report.
     """
     
     # Create the returning list and a list of router information we gather
@@ -333,7 +333,7 @@ def format_failover_alerts(failover_alerts: list[NetCloudFailoverAlert], custome
     # Create the headers for the NetCloud API for this customer.
     netcloud_api_headers = create_netcloud_api_headers(customer_config['netcloud_api_info'])
     
-    # For each failover alert, format its information for Excel rows.
+    # For each failover alert, format its information for CSV rows.
     for failover_alert in failover_alerts:
         # Initialize the list that will hold this row's values.
         failover_alert_row = list[str]()
@@ -377,9 +377,9 @@ def format_failover_alerts(failover_alerts: list[NetCloudFailoverAlert], custome
 def netcloud_failover_reporter(customer_config: dict) -> None:
     """
     Gathers and formats all relevant failover events from last month for the
-    provided customer config. Puts the report data into an Excel sheet and will
+    provided customer config. Puts the report data into a CSV file and will
     email the customer's configured recipients and the Digital Innovation
-    reporting inbox with the Excel sheet. 
+    reporting inbox with the CSV file. 
 
     Args:
         customer_config (dict): The customer configuration.
@@ -393,16 +393,16 @@ def netcloud_failover_reporter(customer_config: dict) -> None:
     logger.info('Formatting failover events...')
     formated_failover_alerts = format_failover_alerts(last_months_failover_alerts, customer_config)
     
-    # Create an Excel sheet of the data.
-    logger.info('Generating Excel sheet of failover events...')
+    # Create a CSV file of the data.
+    logger.info('Generating a CSV file of failover events...')
     failover_report_dataframe = pd.DataFrame(formated_failover_alerts, columns=REPORT_COLUMN_LABELS)
     one_month_ago = datetime.now() + relativedelta(months=-1)
-    failover_report_file_name = f'{one_month_ago.strftime('%Y-%m')}_{EXCEL_BASE_FILE_NAME}.csv'
+    failover_report_file_name = f'{one_month_ago.strftime('%Y-%m')}_{CSV_BASE_FILE_NAME}.csv'
     failover_report_path = f'{SCRIPT_PATH}/../reports/{failover_report_file_name}'
     failover_report_dataframe.to_csv(failover_report_path, index=None, header=True)
 
-    # Send the Excel sheet to the customer and our reporting email inbox.
-    logger.info('Emailing the Excel sheet of failover events...')
+    # Send the CSV file to the customer and our reporting email inbox.
+    logger.info('Emailing the CSV file of failover events...')
     
     # Make the list of email recipients. Always include the reporting inbox.
     email_to = list()
@@ -414,7 +414,7 @@ def netcloud_failover_reporter(customer_config: dict) -> None:
         url=f'{EMAIL_API_BASE_URL}/emailReport/',
         data={
             'to': ', '.join(email_to),
-            'subject': f'[TEST] {customer_config['name']} Monthly Failover Report',
+            'subject': f'{customer_config['name']} Monthly Failover Report',
             'table_title': [f'{customer_config['name']} Montly Failover Report']
         },
         headers={
@@ -455,6 +455,5 @@ def main() -> None:
 
 
 if __name__ == '__main__':
-    # Run the script!
     main()
     
