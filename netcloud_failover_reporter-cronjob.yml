@@ -28,7 +28,7 @@ spec:
             vault.hashicorp.com/ca-cert: /run/secrets/kubernetes.io/serviceaccount/ca.crt
         spec:
           containers:
-            - image: harbor.k3s.quokka.ninja/library/netcloud-failover-reporter:0.0.2
+            - image: harbor.k3s.quokka.ninja/library/netcloud-failover-reporter:0.0.3
               name: netcloud-failover-reporter
               args: ['/bin/bash', '-c', 'source /vault/secrets/emailapi && source /vault/secrets/reporting && python ./src/netcloud_failover_reporter.py']
           restartPolicy: Never
