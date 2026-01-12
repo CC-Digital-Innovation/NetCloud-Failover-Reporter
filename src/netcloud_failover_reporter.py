@@ -1,18 +1,18 @@
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
 import json
 import os
 import time
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
-from dotenv import load_dotenv
-from loguru import logger
+import dotenv
 import pandas as pd
 import pytz
 import requests
+from loguru import logger
 
 
 # ====================== Environment / Global Variables =======================
-load_dotenv(override=True)
+dotenv.load_dotenv(override=True)
 
 # Initialize customer constant global variables.
 with open('/vault/secrets/nc_fail', 'r') as file:
@@ -29,7 +29,7 @@ NETCLOUD_BASE_API_URL = 'https://www.cradlepointecm.com/api/v2'
 NETCLOUD_API_MAX_LIMIT = 100
 
 # Initialize other constant global variables.
-DIGITAL_INNOVATION_REPORTING_INBOX = os.getenv('DIGITAL_INNOVATION_REPORTING_INBOX')
+REPORTING_INBOX = os.getenv('REPORTING_INBOX')
 CSV_BASE_FILE_NAME = 'netcloud_failover_report'
 REPORT_TIME_FORMAT = '%m/%d/%Y %I:%M:%S %p %Z'
 REPORT_COLUMN_LABELS = [
@@ -406,7 +406,7 @@ def netcloud_failover_reporter(customer_config: dict) -> None:
     
     # Make the list of email recipients. Always include the reporting inbox.
     email_to = list()
-    email_to.append(DIGITAL_INNOVATION_REPORTING_INBOX)
+    email_to.append(REPORTING_INBOX)
     email_to.extend(customer_config['email_to'])
     
     # Send the failover report via email.

@@ -20,7 +20,7 @@ spec:
             vault.hashicorp.com/agent-inject-secret-reporting: 'secret/reporting'
             vault.hashicorp.com/agent-inject-template-reporting: |
               {{- with secret "secret/reporting" -}}
-                export DIGITAL_INNOVATION_REPORTING_INBOX="{{ .Data.data.email_address }}"
+                export REPORTING_INBOX="{{ .Data.data.email_address }}"
               {{- end }}
             vault.hashicorp.com/agent-inject-secret-nc_fail: 'secret/nc_fail'
             vault.hashicorp.com/agent-inject-default-template: json
