@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: netcloud-failover-reporter
-  namespace: default
+  namespace: vitu
 spec:
   jobTemplate:
     spec:
@@ -27,12 +27,25 @@ spec:
             vault.hashicorp.com/agent-pre-populate-only: 'true'
             vault.hashicorp.com/ca-cert: /run/secrets/kubernetes.io/serviceaccount/ca.crt
         spec:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10014
+            runAsGroup: 10015
           containers:
             - image: harbor.pscp-css.support/library/netcloud-failover-reporter:0.0.5
+              imagePullPolicy: IfNotPresent
               name: netcloud-failover-reporter
-              args: ['/bin/bash', '-c', 'source /vault/secrets/emailapi && source /vault/secrets/reporting && python ./src/netcloud_failover_reporter.py']
+              command: ['sh', '-c', 'source /vault/secrets/emailapi && source /vault/secrets/reporting && python netcloud_failover_reporter.py']
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+                seccompProfile:
+                  type: RuntimeDefault
           restartPolicy: Never
           serviceAccountName: netcloud-failover-reporter
-      backoffLimit: 3
+      backoffLimit: 2
   schedule: 0 5 1 * *
   timeZone: US/Pacific
