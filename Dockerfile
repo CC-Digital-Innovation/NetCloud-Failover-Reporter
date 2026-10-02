@@ -38,13 +38,17 @@ RUN rm -rf /usr/local/lib/python3.14/site-packages/pip
 # Let Python know where the app's dependencies are located.
 ENV PYTHONPATH="/usr/local/lib/python3.14/site-packages"
 
-# Copy source code.
-COPY ./src .
+# Create non-root user and group.
+RUN addgroup -S -g 10015 appgroup && \
+    adduser -S -u 10014 -G appgroup appuser
 
-# Set non-root user and group to run the app.
-RUN addgroup -S -g 10015 netcloud_failover_reporter && \
-    adduser -S -u 10014 -G netcloud_failover_reporter netcloud_failover_reporter
-USER netcloud_failover_reporter:netcloud_failover_reporter
+# Copy source code and make the local user own the /app directory and all the files within it.
+# This allows the user to write files to the system.
+RUN chown -R appuser:appgroup /app
+COPY --chown=appuser:appgroup ./src ./src
+
+# Set non-root user and group to run the app via their UID and GID.
+USER 10014:10015
 
 # Set the entry for the container to run the app.
-ENTRYPOINT ["python", "netcloud_failover_reporter.py"]
+ENTRYPOINT ["python", "./src/netcloud_failover_reporter.py"]
